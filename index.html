@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E2E TEST CO. – เพื่อนร่วมทาง AI อัจฉริยะเพื่อการเทรดของคุณ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4A90E2; /* Blue */
+            --secondary: #50E3C2; /* Teal */
+            --accent: #F5A623; /* Orange */
+            --neutral-bg: #F8F8F8; /* Light Grey BG */
+            --text-dark: #333333; /* Dark Grey Text */
+            --text-light: #ffffff; /* White Text */
+            --shadow: rgba(0, 0, 0, 0.08);
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--neutral-bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ─── Navigation Bar ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px var(--shadow);
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+        }
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-color: var(--text-light);
+            border-radius: 2px;
+            clip-path: polygon(0 0, 100% 0, 50% 100%); /* Simple "up" arrow */
+            transform: translate(-50%, -50%) rotate(180deg);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--text-light);
+            border: none;
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: inset 0 0 0 0 var(--primary);
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: var(--text-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* ─── Hero Section ─── */
+        #hero {
+            background: linear-gradient(135deg, #1A293F 0%, #2c3e50 100%);
+            color: var(--text-light);
+            padding: 150px 0 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(74,144,226,0.15), transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(80,227,194,0.15), transparent 40%);
+            z-index: 1;
+        }
+
+        #hero .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-headline {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2.2rem, 5vw, 4.2rem);
+            margin-bottom: 25px;
+            line-height: 1.1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInTop 1s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation-delay: 0.3s;
+        }
+
+        .hero-headline span {
+            color: var(--secondary);
+        }
+
+        .hero-subhead {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInTop 1s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation-delay: 0.5s;
+        }
+
+        .hero-body {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInTop 1s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation-delay: 0.7s;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInTop 1s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation-delay: 0.9s;
+        }
+
+        .hero-cta-group .btn-primary {
+            animation: bounceIn 1.5s infinite alternate; /* Subtle bounce */
+        }
+
+        @keyframes fadeInTop {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* ─── Sections General ─── */
+        section {
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        section:nth-of-type(even) {
+            background-color: var(--neutral-bg);
+        }
+
+        section:nth-of-type(odd) {
+            background-color: var(--card-bg);
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        h2 span {
+            color: var(--primary);
+        }
+
+        .section-subhead {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .fade-in-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── Services Section ─── */
+        #services .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            padding: 40px 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid var(--primary);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(74, 144, 226, 0.2);
+        }
+
+        .service-card .icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .service-card p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* ─── About Us Section ─── */
+        #about {
+            background-color: var(--card-bg);
+        }
+
+        #about .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            text-align: left;
+            margin-top: 50px;
+        }
+
+        #about .about-text p {
+            font-size: 1.05rem;
+            color: #444;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        #about .about-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        /* ─── Contact Section ─── */
+        #contact {
+            background: linear-gradient(135deg, #1A293F 0%, #2c3e50 100%);
+            color: var(--text-light);
+            padding-bottom: 100px;
+        }
+
+        #contact h2, #contact .section-subhead {
+            color: var(--text-light);
+        }
+
+        #contact .contact-form-wrapper {
+            background-color: var(--card-bg);
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            max-width: 700px;
+            margin: 50px auto 0;
+            text-align: left;
+        }
+
+        #contact .contact-form-wrapper p {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 25px;
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            background-color: #fcfcfc;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        .contact-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .contact-form .btn-primary {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+        }
+
+        .contact-info {
+            margin-top: 50px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+        }
+
+        .social-icons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .social-icons a {
+            color: var(--text-light);
+            font-size: 1.8rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        /* ─── Footer ─── */
+        footer {
+            background-color: #222;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer .footer-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        footer .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* ─── Responsive Design ─── */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(255, 255, 255, 0.98);
+                box-shadow: 0 10px 20px var(--shadow);
+                padding: 20px 0;
+                border-top: 1px solid #eee;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .nav-links a {
+                padding: 10px 0;
+                display: block;
+                color: var(--text-dark);
+            }
+
+            .nav-links a:hover {
+                color: var(--primary);
+                background-color: var(--neutral-bg);
+            }
+
+            .nav-links a::after {
+                background-color: var(--primary);
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .menu-toggle.active span:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .hero-cta-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            #about .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            #about .about-text { order: 2; }
+            #about .about-image { order: 1; margin-bottom: 30px; }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.3rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            .section-subhead {
+                font-size: 0.9rem;
+            }
+            .service-card {
+                padding: 30px 15px;
+            }
+            .service-card h3 {
+                font-size: 1.3rem;
+            }
+            .contact-form-wrapper {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="logo-icon"></span> E2E TEST CO.
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#contact" class="btn btn-primary get-started-btn">Get Started</a>
+            <div class="menu-toggle" id="mobileMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <h1 class="hero-headline">E2E TEST CO. – เพื่อนร่วมทาง AI <span>อัจฉริยะ</span>เพื่อการเทรดของคุณ</h1>
+            <p class="hero-subhead">ปลดล็อกศักยภาพตลาดด้วย Bot Trade ที่แม่นยำและระบบวิเคราะห์ข้อมูลเชิงลึก</p>
+            <p class="hero-body">ไม่ว่าคุณจะเป็นนักลงทุนมือใหม่หรือมืออาชีพ Bot Trade ของเราพร้อมช่วยคุณตัดสินใจและดำเนินการซื้อขายอย่างชาญฉลาดตลอด 24 ชั่วโมง</p>
+            <div class="hero-cta-group">
+                <a href="#services" class="btn btn-secondary">เรียนรู้เพิ่มเติม</a>
+                <a href="#contact" class="btn btn-primary">เริ่มต้นฟรี</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container fade-in-scroll">
+            <h2>บริการของเรา: ยกระดับการเทรดของคุณ</h2>
+            <p class="section-subhead">เราออกแบบ Bot Trade และเครื่องมือวิเคราะห์ตลาดให้ตอบโจทย์ทุกความต้องการ</p>
+
+            <div class="service-grid">
+                <div class="service-card fade-in-scroll">
+                    <div class="icon">🤖</div>
+                    <h3>Bot Trade อัจฉริยะ</h3>
+                    <p>ระบบเทรดอัตโนมัติที่พัฒนาด้วย AI เรียนรู้และปรับตัวตามสภาวะตลาด เพื่อผลลัพธ์ที่ดีที่สุด</p>
+                </div>
+                <div class="service-card fade-in-scroll">
+                    <div class="icon">📊</div>
+                    <h3>Market Research Insight</h3>
+                    <p>เข้าถึงข้อมูลเชิงลึกและรายงานตลาดล่าสุด ช่วยให้คุณเข้าใจแนวโน้มและโอกาส</p>
+                </div>
+                <div class="service-card fade-in-scroll">
+                    <div class="icon">⚙️</div>
+                    <h3>Personalized Strategies</h3>
+                    <p>สร้างกลยุทธ์การเทรดที่ปรับแต่งได้ตามความเสี่ยงและเป้าหมายการลงทุนของคุณ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about">
+        <div class="container fade-in-scroll">
+            <h2>เกี่ยวกับ E2E TEST CO. – เราคือ<span>ใคร</span></h2>
+            <p class="section-subhead">ทีมงานผู้เชี่ยวชาญด้าน AI, Data Science และการเงิน มุ่งมั่นสร้างนวัตกรรมเพื่อนักลงทุนไทย</p>
+
+            <div class="about-content fade-in-scroll">
+                <div class="about-text">
+                    <p>E2E TEST CO. ก่อตั้งขึ้นด้วยวิสัยทัศน์ที่จะทำให้การเทรดเป็นเรื่องง่ายและเข้าถึงได้สำหรับทุกคน เราเชื่อมั่นในพลังของเทคโนโลยี AI ที่จะเปลี่ยนวิธีการลงทุนให้มีประสิทธิภาพและปลอดภัยยิ่งขึ้น</p>
+                    <p>เราทุ่มเทพัฒนาโซลูชันที่ทันสมัยที่สุด โดยผสานความเชี่ยวชาญด้านการเงินเข้ากับนวัตกรรม AI เพื่อให้คุณมั่นใจว่าทุกการตัดสินใจอยู่บนพื้นฐานของข้อมูลที่แม่นยำและกลยุทธ์ที่แข็งแกร่ง</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container fade-in-scroll">
+            <h2>พร้อมเริ่มต้นแล้วใช่ไหม?</h2>
+            <p class="section-subhead">ติดต่อเราเพื่อพูดคุยถึงความต้องการของคุณ หรือทดลองใช้ Bot Trade ของเรา</p>
+
+            <div class="contact-form-wrapper fade-in-scroll">
+                <p>กรอกข้อมูลด้านล่าง หรือส่งอีเมลมาหาเราได้เลย</p>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">ชื่อของคุณ</label>
+                        <input type="text" id="name" name="name" placeholder="ชื่อ-นามสกุล" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">อีเมล</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">ข้อความ</label>
+                        <textarea id="message" name="message" placeholder="คุณสนใจบริการอะไรเป็นพิเศษ หรือมีข้อสงสัยใดๆ?" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">ส่งข้อความ</button>
+                </form>
+            </div>
+
+            <div class="contact-info fade-in-scroll">
+                <p><strong>อีเมล:</strong> contact@e2etestco.com</p>
+                <p><strong>โทรศัพท์:</strong> +66 81 234 5678</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 E2E TEST CO. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    // Close mobile menu if open
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    }
+                });
+            });
+
+            // Sticky Nav Bar on scroll
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.style.height = '60px';
+                    nav.style.boxShadow = '0 4px 20px var(--shadow)';
+                } else {
+                    nav.style.height = '70px';
+                    nav.style.boxShadow = '0 2px 15px var(--shadow)';
+                }
+            });
+
+            // Mobile menu toggle
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navLinks = document.getElementById('navLinks');
+            mobileMenu.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+            });
+
+            // Fade-in on scroll animation
+            const faders = document.querySelectorAll('.fade-in-scroll');
+            const appearOptions = {
+                threshold: 0.2,
+                rootMargin: "0px 0px -50px 0px" // Adjust to trigger earlier/later
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('is-visible');
+                        appearOnScroll.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+        });
+    </script>
+</body>
+</html>
